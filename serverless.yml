@@ -1,0 +1,37 @@
+service: app
+
+useDotenv: true
+
+provider:
+    name: aws
+    region: us-east-1
+    runtime: provided.al2
+
+plugins:
+    - ./vendor/bref/bref
+
+functions:
+    s3AudioUploaded:
+        handler: ./serverless/index.php
+        environment:
+            ET_AWS_DEFAULT_REGION: ${env:AWS_DEFAULT_REGION}
+            ET_AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
+            ET_AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+            PRESET_ID: 1351620000001-300010
+            PIPELINE_ID: 1651782719885-ewhpal
+
+        layers:
+            - ${bref:layer.php-74}
+        events:
+            - s3:
+                bucket: laravel-s3-media-api
+                event: s3:ObjectCreated:Put
+                rules:
+                    - prefix: uploads/
+                    - suffix: .mp3
+                existing: true
+
+# Exclude files from deployment
+package:
+    patterns:
+        - '!tests/**'

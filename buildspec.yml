@@ -10,8 +10,8 @@ phases:
     - aws --version
     # login to Elastic container registry
     - eval $(aws ecr get-login --region us-east-1 --no-include-email | sed 's|https://||')
-    - REPOSITORY_URI=<YOUR ECR REPOSITORY URI HERE>
-    - IMAGE_TAG=<YOUR IMAGE TAG HERE>
+    - REPOSITORY_URI=239283222484.dkr.ecr.us-east-1.amazonaws.com/lgarwoodzulily/laravel-s3-media-api
+    - IMAGE_TAG=lgarwoodzulily/laravel-s3-media-api
   build:
     commands:
     - echo Build started on `date`

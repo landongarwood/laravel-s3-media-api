@@ -19,7 +19,7 @@ class FileManagementService
 
         $cmd = $client->getCommand('PutObject', [
             'Bucket' => Config::get('filesystems.disks.s3.bucket'),
-            'Key' => $this->generateUploadFilePath,
+            'Key' => $this->generateUploadFilePath(),
             'ACL' => 'public-read',
         ]);
 
@@ -36,7 +36,7 @@ class FileManagementService
 
         return array_map(function ($filePath) use ($s3) {
             return $s3->temporaryUrl($filePath, Carbon::now()->addMinutes(self::EXPIRY_IN_MINUTES));
-        }, $s3->allFiles(self::UPLOAD_DIRECTORY_PATH));
+        }, $s3->allFiles(self::TRIMMED_DIRECTORY_PATH));
     }
 
     protected function generateUploadFilePath(): string
